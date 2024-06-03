@@ -1,6 +1,9 @@
-import { Box, Container, Flex, Text, VStack, Link } from "@chakra-ui/react";
+import { Box, Container, Flex, Text, VStack, Link, Button } from "@chakra-ui/react";
+import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 
 const Index = () => {
+  const { session, logout } = useSupabaseAuth();
+
   return (
     <Box>
       {/* Navigation Bar */}
@@ -12,6 +15,7 @@ const Index = () => {
               <Link href="#" mx={2} color="white">Home</Link>
               <Link href="#" mx={2} color="white">About</Link>
               <Link href="#" mx={2} color="white">Contact</Link>
+              {session && <Button onClick={logout} colorScheme="red" ml={4}>Logout</Button>}
             </Flex>
           </Flex>
         </Container>

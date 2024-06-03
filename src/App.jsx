@@ -1,13 +1,30 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
 import Index from "./pages/Index.jsx";
+import Login from "./pages/Login.jsx";
+import { SupabaseAuthProvider, useSupabaseAuth } from "./integrations/supabase/auth.jsx";
+
+function PrivateRoute({ children }) {
+  const { session } = useSupabaseAuth();
+  return session ? children : <Navigate to="/login" />;
+}
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route exact path="/" element={<Index />} />
-      </Routes>
-    </Router>
+    <SupabaseAuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Index />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </SupabaseAuthProvider>
   );
 }
 
